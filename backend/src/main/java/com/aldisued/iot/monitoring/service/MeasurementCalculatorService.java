@@ -1,6 +1,7 @@
 package com.aldisued.iot.monitoring.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,20 @@ public class MeasurementCalculatorService {
   }
 
   public List<Double> getMovingAverage(List<Double> data, int windowSize) {
-    // TODO: Task 10
-    return List.of();
+    if(windowSize <= 0 || windowSize > data.size()) {
+      throw new IllegalArgumentException("Invalid window size value!");
+    }
+
+    List<Double> movingAverages = new ArrayList<>();
+    for(int i = 0; i <= data.size() - windowSize; i++) {
+      double sum = 0;
+      for(int j = 0; j < windowSize; j++) {
+        sum += data.get(i + j);
+      }
+      movingAverages.add(sum / windowSize);
+    }
+
+    return movingAverages;
   }
 
 }
