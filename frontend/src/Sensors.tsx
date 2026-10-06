@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 type Sensor = {
   id: number;
@@ -19,10 +20,15 @@ const columns: GridColDef<Sensor>[] = [
 ];
 
 function Sensors() {
+  const navigate = useNavigate();
+
   return (
-    <Box component="main" sx={{ p: 3 }}>
-      <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" sx={{ mb: 2 }}>
         Sensors
+      </Typography>
+      <Typography variant="body2" sx={{ mb: 2 }}>
+        Please click on a sensor to check its readings!
       </Typography>
       <DataGrid
         rows={sensors}
@@ -30,6 +36,8 @@ function Sensors() {
         autoHeight
         hideFooter
         disableRowSelectionOnClick
+        onRowClick={({ row }) => navigate(`/sensors/${row.id}`)}
+        sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
       />
     </Box>
   );
