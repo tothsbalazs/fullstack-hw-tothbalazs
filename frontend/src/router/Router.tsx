@@ -1,24 +1,31 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Alerts from "../components/Alerts";
+import NavigationLayout from "../components/NavigationLayout";
 import SensorReadings from "../components/SensorReadings";
 import Sensors from "../components/Sensors";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/sensors" replace />,
-  },
-  {
-    path: "/sensors",
-    element: <Sensors />,
-  },
-  {
-    path: "/alerts",
-    element: <Alerts />,
-  },
-  {
-    path: "/sensors/:id",
-    element: <SensorReadings />,
+    element: <NavigationLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/sensors" replace />,
+      },
+      {
+        path: "sensors",
+        element: <Sensors />,
+      },
+      {
+        path: "alerts",
+        element: <Alerts />,
+      },
+      {
+        path: "sensors/:id",
+        element: <SensorReadings />,
+      },
+    ],
   },
 ]);
 
