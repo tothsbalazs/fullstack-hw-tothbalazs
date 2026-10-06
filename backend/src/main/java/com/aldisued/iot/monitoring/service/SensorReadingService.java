@@ -3,6 +3,7 @@ package com.aldisued.iot.monitoring.service;
 import com.aldisued.iot.monitoring.dto.SensorReadingDto;
 import com.aldisued.iot.monitoring.entity.Sensor;
 import com.aldisued.iot.monitoring.entity.SensorReading;
+import com.aldisued.iot.monitoring.exception.ResourceNotFoundException;
 import com.aldisued.iot.monitoring.repository.SensorReadingRepository;
 import com.aldisued.iot.monitoring.repository.SensorRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class SensorReadingService {
 
   public SensorReading saveSensorReading(SensorReadingDto sensorReadingDto) {
     Sensor sensor = sensorRepository.findById(sensorReadingDto.sensorId())
-        .orElseThrow(() -> new IllegalArgumentException(
+        .orElseThrow(() -> new ResourceNotFoundException(
             "Sensor with ID " + sensorReadingDto.sensorId() + " not found"));
 
     return sensorReadingRepository.save(new SensorReading(

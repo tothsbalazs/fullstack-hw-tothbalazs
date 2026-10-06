@@ -3,13 +3,12 @@ package com.aldisued.iot.monitoring.service;
 import com.aldisued.iot.monitoring.dto.AlertDto;
 import com.aldisued.iot.monitoring.entity.Alert;
 import com.aldisued.iot.monitoring.entity.Sensor;
+import com.aldisued.iot.monitoring.exception.ResourceNotFoundException;
 import com.aldisued.iot.monitoring.repository.AlertRepository;
 import com.aldisued.iot.monitoring.repository.SensorRepository;
 import java.util.UUID;
-import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AlertService {
@@ -27,7 +26,7 @@ public class AlertService {
 
   public Alert saveAlert(AlertDto alertDto) {
     Sensor sensor = sensorRepository.findById(alertDto.sensorId())
-      .orElseThrow(() -> new IllegalArgumentException(
+      .orElseThrow(() -> new ResourceNotFoundException(
         "Sensor with ID " + alertDto.sensorId() + " not found"));
 
     Alert savedAlert = alertRepository.save(new Alert(alertDto.message(), alertDto.timestamp(), sensor));
@@ -39,8 +38,8 @@ public class AlertService {
 
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
     Alert alert = alertRepository.findFirstBySensorIdOrderByTimestampDesc(sensorId)
-      .orElseThrow(() -> new ResponseStatusException(
-        HttpStatus.NOT_FOUND, String.format("No alert found for sensor %s", sensorId)));
+      .orElseThrow(() -> new ResourceNotFoundException(
+        String.format("No alert found for sensor %s", sensorId)));
 
     return new AlertDto(alert.getSensor().getId(), alert.getMessage(), alert.getTimestamp());
   }

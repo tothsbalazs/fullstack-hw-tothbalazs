@@ -2,10 +2,9 @@ package com.aldisued.iot.monitoring.service;
 
 import com.aldisued.iot.monitoring.dto.SensorDto;
 import com.aldisued.iot.monitoring.entity.Sensor;
+import com.aldisued.iot.monitoring.exception.DuplicateSensorException;
 import com.aldisued.iot.monitoring.repository.SensorRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class SensorService {
@@ -18,8 +17,8 @@ public class SensorService {
 
   public Sensor saveSensor(SensorDto sensor) {
     if (sensorRepository.existsByName(sensor.name())) {
-      throw new ResponseStatusException(
-        HttpStatus.CONFLICT, String.format("Sensor with name %s already exists", sensor.name()));
+      throw new DuplicateSensorException(
+          String.format("Sensor with name %s already exists", sensor.name()));
     }
 
     return sensorRepository.save(new Sensor(
