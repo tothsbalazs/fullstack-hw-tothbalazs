@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Alerts from "./Alerts";
-import SensorDetails from "./SensorDetails";
+import SensorReadings from "./SensorReadings";
 import Sensors from "./Sensors";
 
 const router = createBrowserRouter([
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/sensors/:id",
-    element: <SensorDetails />,
+    element: <SensorReadings />,
   },
 ]);
 

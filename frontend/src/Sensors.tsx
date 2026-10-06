@@ -3,15 +3,22 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 
 type Sensor = {
-  id: number;
+  id: string;
   name: string;
   type: string;
 };
 
 const sensors: Sensor[] = [
-  { id: 1, name: "Temperature sensor", type: "Temperature" },
-  { id: 2, name: "Humidity sensor", type: "Humidity" },
-  { id: 3, name: "Atmospheric pressure sensor", type: "Atmospheric pressure" },
+  {
+    id: "e3242ea2-0514-46d3-aad8-b2012980c41c",
+    name: "Temperature Sensor 1",
+    type: "TEMPERATURE",
+  },
+  {
+    id: "ac723c77-955f-469d-9d6a-d56bac39c202",
+    name: "Humidity Sensor 1",
+    type: "HUMIDITY",
+  },
 ];
 
 const columns: GridColDef<Sensor>[] = [
