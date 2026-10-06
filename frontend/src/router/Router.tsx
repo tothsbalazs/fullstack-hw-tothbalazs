@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Alerts from "./Alerts";
-import SensorReadings from "./SensorReadings";
-import Sensors from "./Sensors";
+import Alerts from "../components/Alerts";
+import SensorReadings from "../components/SensorReadings";
+import Sensors from "../components/Sensors";
 
 const router = createBrowserRouter([
   {

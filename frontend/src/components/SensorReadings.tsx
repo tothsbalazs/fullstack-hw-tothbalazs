@@ -2,8 +2,8 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useState, type FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import type { AppDispatch } from "./store/store";
-import { submitSensorReading } from "./store/sensorReadingsSlice";
+import type { AppDispatch } from "../store/store";
+import { submitSensorReading } from "../store/sensorReadingsSlice";
 
 function getCurrentLocalDateTime() {
   const now = new Date();
