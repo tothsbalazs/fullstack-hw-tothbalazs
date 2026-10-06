@@ -28,7 +28,10 @@ public class AlertService {
   }
 
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
-    // TODO: Task 5
-    return null;
+    Alert alert = alertRepository.findFirstBySensorIdOrderByTimestampDesc(sensorId)
+      .orElseThrow(() -> new ResponseStatusException(
+        HttpStatus.NOT_FOUND, String.format("No alert found for sensor %s", sensorId)));
+
+    return new AlertDto(alert.getSensor().getId(), alert.getMessage(), alert.getTimestamp());
   }
 }
