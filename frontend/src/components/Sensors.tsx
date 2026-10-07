@@ -4,8 +4,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { Sensor } from "../services/api";
-import { fetchSensors } from "../store/sensorsSlice";
-import type { AppDispatch, RootState } from "../store/store";
+import Loading from "./Loading";
+import {
+  fetchSensors,
+  getSensorsError,
+  getSensorsLoading,
+  selectSensors,
+} from "../store/sensorsSlice";
+import type { AppDispatch } from "../store/store";
 
 const columns: GridColDef<Sensor>[] = [
   { field: "name", headerName: "Name", flex: 1 },
@@ -14,14 +20,28 @@ const columns: GridColDef<Sensor>[] = [
 
 function Sensors() {
   const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
-  const sensors = useSelector((state: RootState) => state.sensors.sensors);
+
+  const sensors = useSelector(selectSensors);
+  const loading = useSelector(getSensorsLoading);
+  const error = useSelector(getSensorsError);
 
   useEffect(() => {
     dispatch(fetchSensors());
   }, [dispatch]);
 
-  return (
+  if (error) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">Failed to load sensors.</Typography>
+      </Box>
+    );
+  }
+
+  return loading ? (
+    <Loading />
+  ) : (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
         Sensors
