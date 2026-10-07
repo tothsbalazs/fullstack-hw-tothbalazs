@@ -1,25 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type Sensor = {
-  id: string;
-  name: string;
-  type: string;
-};
-
-const sensors: Sensor[] = [
-  {
-    id: "e3242ea2-0514-46d3-aad8-b2012980c41c",
-    name: "Temperature Sensor 1",
-    type: "TEMPERATURE",
-  },
-  {
-    id: "ac723c77-955f-469d-9d6a-d56bac39c202",
-    name: "Humidity Sensor 1",
-    type: "HUMIDITY",
-  },
-];
+import { getSensors, type Sensor } from "../services/api";
 
 const columns: GridColDef<Sensor>[] = [
   { field: "name", headerName: "Name", flex: 1 },
@@ -28,6 +11,11 @@ const columns: GridColDef<Sensor>[] = [
 
 function Sensors() {
   const navigate = useNavigate();
+  const [sensors, setSensors] = useState<Sensor[]>([]);
+
+  useEffect(() => {
+    void getSensors().then(setSensors);
+  }, []);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -35,7 +23,7 @@ function Sensors() {
         Sensors
       </Typography>
       <Typography variant="body2" sx={{ mb: 2 }}>
-        Please click on a sensor to check its readings!
+        Please click on a sensor to add a new reading to it!
       </Typography>
       <DataGrid
         rows={sensors}
