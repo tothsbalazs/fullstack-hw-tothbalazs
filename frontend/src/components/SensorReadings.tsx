@@ -1,9 +1,20 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState, type FormEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import type { AppDispatch } from "../store/store";
-import { submitSensorReading } from "../store/sensorReadingsSlice";
+import {
+  submitSensorReading,
+  getSensorReadingsLoading,
+  getSensorReadingsError,
+} from "../store/sensorReadingsSlice";
 
 function getCurrentLocalDateTime() {
   const now = new Date();
@@ -15,6 +26,8 @@ function SensorReadings() {
   const { id } = useParams();
   const sensorId = id ?? "";
 
+  const error = useSelector(getSensorReadingsError);
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -24,6 +37,11 @@ function SensorReadings() {
         Sensor ID: {sensorId}
       </Typography>
       <SensorReadingForm key={sensorId} sensorId={sensorId} />
+      {error && (
+        <Typography color="error" sx={{ mt: 2 }}>
+          Failed to submit sensor reading.
+        </Typography>
+      )}
     </Box>
   );
 }
@@ -34,8 +52,11 @@ type SensorReadingFormProps = {
 
 function SensorReadingForm({ sensorId }: SensorReadingFormProps) {
   const dispatch = useDispatch<AppDispatch>();
+
   const [value, setValue] = useState("");
   const [timestamp, setTimestamp] = useState(getCurrentLocalDateTime);
+
+  const loading = useSelector(getSensorReadingsLoading);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,8 +84,16 @@ function SensorReadingForm({ sensorId }: SensorReadingFormProps) {
           required
           fullWidth
         />
-        <Button type="submit" variant="contained">
-          Submit reading
+        <Button type="submit" variant="contained" disabled={loading}>
+          {loading ? (
+            <CircularProgress
+              size={24}
+              color="inherit"
+              aria-label="Submitting reading"
+            />
+          ) : (
+            "Submit reading"
+          )}
         </Button>
       </Stack>
     </Box>
