@@ -1,8 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getSensors, type Sensor } from "../services/api";
+import type { Sensor } from "../services/api";
+import { fetchSensors } from "../store/sensorsSlice";
+import type { AppDispatch, RootState } from "../store/store";
 
 const columns: GridColDef<Sensor>[] = [
   { field: "name", headerName: "Name", flex: 1 },
@@ -11,11 +14,12 @@ const columns: GridColDef<Sensor>[] = [
 
 function Sensors() {
   const navigate = useNavigate();
-  const [sensors, setSensors] = useState<Sensor[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const sensors = useSelector((state: RootState) => state.sensors.sensors);
 
   useEffect(() => {
-    void getSensors().then(setSensors);
-  }, []);
+    dispatch(fetchSensors());
+  }, [dispatch]);
 
   return (
     <Box sx={{ p: 3 }}>
