@@ -2,11 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SensorReadings from "../components/SensorReadings";
 import { postSensorReading } from "../services/api";
 import sensorReadingsReducer from "../store/sensorReadingsSlice";
+
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("react-router-dom")>()),
+  useParams: () => ({ id: "sensor-UUID" }),
+}));
 
 vi.mock("../services/api", () => ({
   postSensorReading: vi.fn(),
@@ -24,11 +28,7 @@ describe("sensorReadings component test", () => {
 
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/sensors/sensor-UUID"]}>
-          <Routes>
-            <Route path="/sensors/:id" element={<SensorReadings />} />
-          </Routes>
-        </MemoryRouter>
+        <SensorReadings />
       </Provider>,
     );
 
