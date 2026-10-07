@@ -8,10 +8,14 @@ import type { RootState } from "./store";
 
 type AlertsState = {
   alerts: Alert[];
+  loading: boolean;
+  error: boolean;
 };
 
 const initialState: AlertsState = {
   alerts: [],
+  loading: false,
+  error: false,
 };
 
 export const getSortedAlerts = createSelector(
@@ -24,6 +28,9 @@ export const getSortedAlerts = createSelector(
     ),
 );
 
+export const getAlertsLoading = (state: RootState) => state.alerts.loading;
+export const getAlertsError = (state: RootState) => state.alerts.error;
+
 export const fetchAlerts = createAsyncThunk("alerts/fetch", async () =>
   getAlerts(),
 );
@@ -33,8 +40,17 @@ const alertsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    builder.addCase(fetchAlerts.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+    });
     builder.addCase(fetchAlerts.fulfilled, (state, action) => {
+      state.loading = false;
       state.alerts = action.payload;
+    });
+    builder.addCase(fetchAlerts.rejected, (state) => {
+      state.loading = false;
+      state.error = true;
     });
   },
 });

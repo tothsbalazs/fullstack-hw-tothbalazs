@@ -3,7 +3,13 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { Alert } from "../services/api";
-import { fetchAlerts, getSortedAlerts } from "../store/alertsSlice";
+import Loading from "./Loading";
+import {
+  fetchAlerts,
+  getAlertsError,
+  getAlertsLoading,
+  getSortedAlerts,
+} from "../store/alertsSlice";
 import type { AppDispatch } from "../store/store";
 
 const columns: GridColDef<Alert>[] = [
@@ -14,7 +20,10 @@ const columns: GridColDef<Alert>[] = [
 
 function Alerts() {
   const dispatch = useDispatch<AppDispatch>();
+
   const alerts = useSelector(getSortedAlerts);
+  const loading = useSelector(getAlertsLoading);
+  const error = useSelector(getAlertsError);
 
   useEffect(() => {
     dispatch(fetchAlerts());
@@ -26,7 +35,17 @@ function Alerts() {
     return () => window.clearInterval(intervalId);
   }, [dispatch]);
 
-  return (
+  if (error) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">Failed to load alerts.</Typography>
+      </Box>
+    );
+  }
+
+  return loading ? (
+    <Loading />
+  ) : (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
         Alerts
