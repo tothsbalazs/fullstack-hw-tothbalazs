@@ -50,11 +50,13 @@ export const sensorReadings: SensorReading[] = [
 
 export const alerts: Alert[] = [
   {
+    id: 1,
     sensorId: sensors[0].id,
     message: "Temperature reading exceeded the configured upper limit.",
     timestamp: minutesAgo(4),
   },
   {
+    id: 2,
     sensorId: sensors[1].id,
     message: "Humidity reading is below the configured lower limit.",
     timestamp: minutesAgo(36),

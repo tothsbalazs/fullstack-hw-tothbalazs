@@ -11,13 +11,14 @@ export type Sensor = {
 };
 
 export type SensorReading = {
-  id: string | number;
+  id: number;
   sensorId: string;
   value: number;
   timestamp: string;
 };
 
 export type Alert = {
+  id: number;
   sensorId: string;
   message: string;
   timestamp: string;
